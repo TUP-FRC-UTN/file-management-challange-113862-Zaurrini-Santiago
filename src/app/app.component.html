@@ -5,7 +5,7 @@
   </button>
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" (click)="onNewClick()" href="#">Nuevo</a></li>
-    <li><a class="dropdown-item" href="#">Borrar</a></li>
+    <li><a class="dropdown-item" href="#" (click)="deleteFiles()">Borrar</a></li>
   </ul>
 </div>
 <table class="table">
@@ -22,7 +22,7 @@
     {
     <tr>
       <th scope="row">
-        <input class="form-check-input" type="checkbox" value="" id="check">
+        <input class="form-check-input" type="checkbox" value="" id="check" [(ngModel)]="file.selected">
       </th>
       <td>
         <div [attr.title]="file.name.length > 10 ? file.name : null">
@@ -31,13 +31,16 @@
       </td>
       <td>{{file.creation | date: 'MMM dd, yyyy'}}</td>
       <td>
-        @if (file.owners.length > 0) {
-        @for (owner of file.owners.slice(0, 3); track $index) {
-        <img [src]="owner.avatarUrl" alt="{{ owner.name }}" class="avatar" title="{{ owner.name }}" />
-        }
-        @if (file.owners.length > 3) {
-        <span class="more-owners">+{{ file.owners.length - 3 }}</span>
-        }
+        @if (file.owners.length > 0)
+        {
+          @for (owner of file.owners.slice(0, 3); track $index)
+            {
+            <img [src]="owner.avatarUrl" alt="{{ owner.name }}" class="avatar" title="{{ owner.name }}" />
+            }
+          @if (file.owners.length > 3) 
+          {
+            <span>+{{ file.owners.length - 3 }}</span>
+          }
         }
       </td>
     </tr>
@@ -46,5 +49,5 @@
 </table>
 
 @if (this.showForm) {
-  <app-form></app-form>
+<app-form (formClosed)="onFormClosed()" (enviadoEmit)="saveForm($event)"></app-form>
 }

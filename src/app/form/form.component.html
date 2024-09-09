@@ -1,27 +1,45 @@
-<div class="mb-3">
+<form #form="ngForm" (ngSubmit)="save(form)" class="row g-3 container">
+  <div class="mb-3">
     <h3>Nuevo Archivo</h3>
-</div>
-<div class="mb-3">
-    <label for="formGroupExampleInput" class="form-label">Nombre</label>
-    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input placeholder">
   </div>
+  <div class="mb-3">
+    <label for="formGroupExampleInput" class="form-label">Nombre</label>
+    <input #nombre="ngModel" name="nombre" type="text" class="form-control" [(ngModel)]="fileItem.name"
+    [ngClass]="{'is-valid': nombre.valid && (nombre.dirty || nombre.touched),'is-invalid': nombre.invalid && (nombre.dirty || nombre.touched)}" required>
+    @if (nombre.invalid && (nombre.dirty || nombre.touched)) {
+    <div class="text-danger mt-1">El nombre es requerido</div>
+    }
+  </div>
+
   <div class="mb-3">
     <label for="formGroupExampleInput2" class="form-label">Fecha</label>
-    <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="Another input placeholder">
+    <input #fecha="ngModel" name="fecha" type="date" class="form-control" id="formGroupExampleInput2"
+      placeholder="Another input placeholder" [(ngModel)]="fileItem.creation"
+      [ngClass]="{'is-valid': fecha.valid && (fecha.dirty || fecha.touched),'is-invalid': fecha.invalid && (fecha.dirty || fecha.touched)}" required>
+    @if (fecha.invalid && (fecha.dirty || fecha.touched)) {
+    <div class="text-danger mt-1">El nombre es requerido</div>
+    }
+  </div>
+
+  <div class="mb-3">
+    <label for="formGroupExampleInput" class="form-label">Tipo Archivo</label>
+    <select #tipo="ngModel" name="tipo" id="type" name="type" class="form-select" [(ngModel)]="fileItem.type">
+      <option [ngValue]="filetype.FILE">Archivo</option>
+      <option [ngValue]="filetype.FOLDER">Carpeta</option>
+    </select>
   </div>
   <div class="mb-3">
-    <select id="type" name="type" class="form-select">
-        <option>Archivo</option>
-        <option>Carpeta</option>
-      </select>
+    <label for="formGroupExampleInput" class="form-label">Agregar Dueño</label>
+    <select #owner="ngModel" id="owner" name="owner" class="form-select" [(ngModel)]="fileItem.owners"  
+    [ngClass]="{'is-valid': owner.valid && (owner.dirty || owner.touched),'is-invalid': owner.invalid && (owner.dirty || owner.touched)}" required >
+      @for (owner of owners; track $index)
+      {
+      <option [ngValue]="owner">{{owner.name}}</option>
+      }
+    </select>
   </div>
-  <div class="mb-3">
-    <select id="owner" name="owner" class="form-select">
-        <option></option>
-        <option></option>
-      </select>
+  <div class="d-flex justify-content-between align-items-center">
+    <button type="button" class="btn btn-dark" (click)="onClose()">Volver</button>
+    <button type="submit" class="btn btn-primary">Guardar</button>
   </div>
-<div class="d-flex justify-content-between align-items-center">
-  <button type="button" class="btn btn-dark">Volver</button>
-  <button type="button" class="btn btn-primary">Guardar</button>
-</div>
+</form>
